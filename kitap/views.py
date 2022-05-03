@@ -32,7 +32,7 @@ def authentication(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('about')
+                return redirect('index')
 
     context = {'register': register}
     return render(request, 'kitap/authentication.html', context)
