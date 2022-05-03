@@ -16,6 +16,7 @@
                 {% csrf_token %}
                 <h1 class="mb">Create Account</h1>
                 {{ register.username }}
+                {{ register.email }}
                 {{ register.password1 }}
                 {{ register.password2 }}
                 <button class="mt" type="submit">Sign Up</button>
