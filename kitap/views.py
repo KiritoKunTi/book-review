@@ -2,6 +2,8 @@ from django.shortcuts import redirect, render
 from .forms import CustomRegisterForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
+from django.core.mail import send_mail
 
 # Create your views here.
 def authentication(request):
@@ -13,9 +15,16 @@ def authentication(request):
         if request.POST.get('login-username') is None:
             register = CustomRegisterForm(request.POST)
             if register.is_valid():
+                username = register.cleaned_data.get('username')
+                email = register.cleaned_data.get('email')                
+                subject = 'welcome to Kitap world'
+                message = f'Hi { username }, thank you for registering in Kitap.'
+                email_from = settings.EMAIL_HOST_USER
+                recipient_list = [ email ]
+                send_mail( subject, message, email_from, recipient_list )
+                
                 register.save()
-
-
+                
         else:
             username = request.POST.get('login-username')
             password = request.POST.get('login-password')
