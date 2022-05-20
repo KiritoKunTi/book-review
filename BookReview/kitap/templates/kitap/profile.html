@@ -1,10 +1,43 @@
 {% extends 'kitap/base.html' %}
-
+{% load static %}
 
 {% block title %}Profile{% endblock %}
-
-{% block content %}
-    <h1>Profile page</h1>
+{% block style %}
+    <link rel="stylesheet" href="{% static 'kitap/css/profile.css' %}">
 {% endblock %}
 
-
+{% block content %}
+    {% if user.profile.phone %}
+        <div class="wrap-profile">
+            <div class="block-profile flex">
+                <div class="block-user-name">
+                    <p class="username">{{ user }}</p>
+                    <p class="full_name">{{ user.profile.first_name }} {{ user.profile.last_name }}</p>
+                </div>
+                <div class="block-user-info">
+                    <div class="block-user-info__label">Information</div>
+                    <div class="flex">
+                        <div class="user-info">
+                            <label for="">Email</label>
+                            <p>{{ email }}</p>
+                        </div>
+                        <div class="user-info">
+                            <label for="">Phone</label>
+                            <p>{{ user.profile.phone }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        
+        <a href="{% url 'edit_profile' user.profile.id %}" class="profile-edit-btn">Edit Profile</a>
+    {% else %}
+        <div class="wrap-profile-form">
+            <div class="profile-form-title">Add Profile Information</div>
+            <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="create-profile-btn">Create Profile</button>        
+            </form>
+        </div>
+    {% endif %}
+{% endblock %}
