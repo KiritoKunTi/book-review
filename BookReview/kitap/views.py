@@ -1,9 +1,12 @@
-from django.shortcuts import redirect, render
+import email
+from django.shortcuts import redirect, render, get_object_or_404
 from .forms import CustomRegisterForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.mail import send_mail
+from .forms import *
+from django.contrib.auth.models import User
 
 # Create your views here.
 def authentication(request):
@@ -53,10 +56,45 @@ def about(request):
 def categories(request):
     return render(request, 'kitap/categories.html')
 
+
 @login_required(login_url='authentication')
-def profile(request):
-    return render(request, 'kitap/profile.html')
+def edit_profile(request, pk):
+    profile = Profile.objects.get(id=pk)
+    form = ProfileForm(instance=profile)
+    
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+
+    context = {'form': form}
+    return render(request, 'kitap/edit_profile.html', context)
+
+@login_required(login_url='authentication')
+def profile(request, pk):
+    user = User.objects.get(id=pk)
+    email = user.email
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=load_profile(request.user))
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+    else:
+        form = ProfileForm(instance=load_profile(request.user))
+ 
+    context = {
+        'form': form,
+        'email': email,
+        }
+    return render(request, 'kitap/profile.html', context)
 
 @login_required(login_url='authentication')
 def faq(request):
     return render(request, 'kitap/faq.html')
+
+def load_profile(user):
+    try:
+        return user.profile
+    except Exception:
+        return Profile.objects.create(user=user)
