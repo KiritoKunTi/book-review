@@ -1,0 +1,54 @@
+{% extends 'kitap/base.html' %}
+{% load static %}
+{% load poll_extras %}
+{% block title %}Textbooks{% endblock %}
+
+{% block content %}
+<div class="shell">
+    <div class="container">
+        <div class="faq-title text-center pb-3">
+            <h2>{{ cat.cat_name }}</h2>
+        </div>
+        <div class="row">
+            {% for i in books %}
+            <div class="col-md-3">
+              <div class="wsk-cp-product">
+                <div class="wsk-cp-img">
+                  <img src="{{i.book_image.url}}" alt="Product" class="img-responsive" />
+                </div>
+                <div class="wsk-cp-text">
+                  <div class="category">
+                    <a href="/book/{{i.book_slug}}" class="btn btn-primary">View</a>
+                  </div>
+                  <div class="title-product">
+                    <h3>{{i.book_title}}</h3>
+                  </div>
+                  <div class="description-prod">
+                    <p>Author: <span>{{i.book_author}}</span></p>
+                    <span class="hint-star star">
+                        {% for value in 6|times %}
+                        {% if value <= i.book_rating %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        {% elif i.book_rating|to_int < i.book_rating and forloop.counter > i.book_rating %}
+                        <i class="fa fa-star-half-o" aria-hidden="true"></i>
+                        {% else %}
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        {% endif %}
+                        {% endfor %}
+                        
+                    </span>
+                   
+                  </div>
+                  <div class="card-footer">
+                    <div class="wcf-left"><span class="author">Add your review:</span></div>
+                    <div class="wcf-right"><a href="#" class="comment-btn"><img src="{% static 'kitap/images/comment.svg' %}" alt=""></a></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+    </div>
+</div>
+{% endblock %}
+

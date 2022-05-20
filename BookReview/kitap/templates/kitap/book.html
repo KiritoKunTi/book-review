@@ -1,0 +1,44 @@
+{% extends 'kitap/base.html' %}
+{% load static %}
+
+{% block title %} {% endblock %}
+
+{% load poll_extras %}
+{% block content %}
+<div id="container">	
+        <div class="product-details">
+        <h1> {{book.book_title}} </h1>
+        <br>
+    <span class="hint-star star">
+        {% for value in 6|times %}
+        {% if forloop.counter <= book.book_rating %}
+        <i class="fa fa-star" aria-hidden="true"></i>
+        {% elif book.book_rating|to_int < book.book_rating and forloop.counter > book.book_rating %}
+        <i class="fa fa-star-half-o" aria-hidden="true"></i>
+        {% else %}
+        <i class="fa fa-star-o" aria-hidden="true"></i>
+        {% endif %}
+        {% endfor %}
+        <span style="color: black;">{{book.book_rating}}</p></span>
+    </span>
+            <p class="information"> {{book.book_info}} </p>
+    </div>
+    <div class="product-image">
+        
+        <img src="{{book.book_image.url}}" alt="Omar Dsoky">
+    
+    <div class="info">
+        <h2>The Description</h2>
+        <ul>
+            <li><strong>Category: </strong> {{book.book_cat}} </li>
+            <li><strong>Author: </strong>{{book.book_author}}</li>
+            <li><strong>Publisher: </strong>{{book.book_publisher}}</li>
+            <li><strong>Rating: </strong>{{book.book_rating}}</li>
+            <li><strong>Pages: </strong>{{book.book_pages}}</li>
+        </ul>
+    </div>
+    </div>
+    </div>
+    
+    
+{% endblock %}

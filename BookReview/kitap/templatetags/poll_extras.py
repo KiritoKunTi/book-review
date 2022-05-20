@@ -10,4 +10,12 @@ def get_faqs():
 @register.simple_tag(name='getcats')
 def get_categories():
     return Category.objects.all()
+
+@register.filter(name='times') 
+def times(number):
+    return range(1,number)
+
+@register.filter()
+def to_int(value):
+    return int(value)        
         

@@ -3,4 +3,4 @@ from .models import *
 
 admin.site.register(Faq)
 admin.site.register(Category)
-# Register your models here.
+admin.site.register(Book)

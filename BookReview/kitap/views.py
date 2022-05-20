@@ -1,9 +1,10 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from .forms import CustomRegisterForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.mail import send_mail
+from .models import *
 
 # Create your views here.
 def authentication(request):
@@ -60,3 +61,16 @@ def profile(request):
 @login_required(login_url='authentication')
 def faq(request):
     return render(request, 'kitap/faq.html')
+
+@login_required(login_url='authentication')
+def bookByCategory(request, category_slug):
+    cat =get_object_or_404(Category,cat_slug=category_slug)
+    books = Book.objects.filter(book_cat=cat.cat_id)
+    content = {'books':books, 'cat': cat, 'range': range(1,6)}
+    return render(request, 'kitap/booksByCat.html',content)    
+
+@login_required(login_url='authentication')
+def viewBook(request, book_slug):
+    book = Book.objects.get(book_slug = book_slug)
+    content = {'book':book}
+    return render(request, 'kitap/book.html',content)        
